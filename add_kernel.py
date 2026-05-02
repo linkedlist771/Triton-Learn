@@ -9,9 +9,14 @@ DEVICE = torch.device("cuda", torch.cuda.current_device())
 
 @triton.jit
 def add_kernel(x_ptr, y_ptr, output_ptr, n_elments, BLOCK_SIZE: tl.constexpr):
+    # tl.constexpr 编译器常量， 让编译器知道
     pid = tl.program_id(axis=0)
+    # 类似 cuda 里面的 blockIdx.x
+
 
     block_start = pid * BLOCK_SIZE
+    # 类似 cuda里面的 idx = blockIdx.x * blockDim.x  
+    # triton 里面隐藏掉了threadIdx.x
     offsets = block_start + tl.arange(0, BLOCK_SIZE)
     
     mask = offsets < n_elments
