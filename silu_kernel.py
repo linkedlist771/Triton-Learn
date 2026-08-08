@@ -25,7 +25,7 @@ def triton_silu_kernel(x_ptr, y_ptr, n_elements: int, BLOCK_SIZE: tl.constexpr):
     x = tl.load(x_ptr + offsets, mask=mask)
     
     # res = x / (1 + tl.exp(-x))
-    res = x* tl.sigmoid(x)
+    res = x * tl.sigmoid(x)
     tl.store(y_ptr + offsets, res, mask=mask)
 
 
